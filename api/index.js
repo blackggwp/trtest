@@ -13,7 +13,7 @@ app.get("/read", (req, res) => {
 let db = new sqlite3.Database("./posts.db");
   const top = req.query.top
   const skip = req.query.skip
-  let sql = `SELECT * FROM posts LIMIT ${top} OFFSET ${skip}`;
+  let sql = `SELECT *, (SELECT COUNT(*) FROM posts) totalRow FROM posts LIMIT ${top} OFFSET ${skip}`;
   db.all(sql, [], (err, rows) => {
     if (err) {
       throw err;

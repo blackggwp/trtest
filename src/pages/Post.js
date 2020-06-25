@@ -52,7 +52,8 @@ export default function Post(props) {
   const [pagination, setPagination] = useState({
     skip: 0,
     row: 4,
-    current: 1
+    current: 1,
+    isLastPage: false
   })
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +72,13 @@ export default function Post(props) {
       setPagination({...pagination,
         current: current
       })
+      // check Last page
+      posts.length > 0 &&
+        (skip >= posts[0].totalRow || 
+          posts[0].totalRow - skip === skip) 
+          && setPagination({...pagination,
+          isLastPage: true
+        })
 
       setIsLoading(false);
     } catch (error) {
@@ -172,6 +180,7 @@ export default function Post(props) {
               <Grid item xs={12}>
               <Button
                   fullWidth
+                  disabled={pagination.isLastPage}
                   variant="contained"
                   color="default"
                   onClick={loadmore}
